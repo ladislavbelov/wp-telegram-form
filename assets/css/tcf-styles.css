@@ -30,7 +30,7 @@
     resize: vertical;
 }
 
-.tcf-form button {
+.tcf-submit-btn {
     padding: 10px 20px;
     background-color: #4A90E2;
     color: #fff;
@@ -38,10 +38,34 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    position: relative;
 }
 
-.tcf-form button:hover {
+.tcf-submit-btn:hover {
     background-color: #3a78c2;
+}
+
+.tcf-submit-btn:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+}
+
+.tcf-submit-btn.sending::after {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .form-message {
