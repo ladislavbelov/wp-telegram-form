@@ -5,7 +5,21 @@ jQuery(document).ready(function($) {
         var $form = $(this);
         var $button = $form.find('.tcf-submit-btn');
         var $message = $form.find('.form-message');
+        var $captcha = $form.find('#tcf-captcha');
         $message.hide().removeClass('success error');
+
+        // Получаем текст капчи (например, "2 + 3 = ?") из метки
+        var captchaText = $form.find('label[for="tcf-captcha"]').text().trim();
+        var captchaNumbers = captchaText.match(/\d+/g); // Извлекаем числа (например, ["2", "3"])
+        var correctAnswer = captchaNumbers ? parseInt(captchaNumbers[0]) + parseInt(captchaNumbers[1]) : 0;
+        var userAnswer = parseInt($captcha.val()) || 0;
+
+        // Проверяем капчу на стороне клиента
+        if (userAnswer !== correctAnswer) {
+            $message.addClass('error').text('Incorrect captcha answer. Please try again.').show();
+            $button.prop('disabled', false).removeClass('sending').text('Send Request');
+            return;
+        }
 
         // Блокируем кнопку и показываем индикатор отправки
         $button.prop('disabled', true).addClass('sending').text('Sending...');
@@ -18,6 +32,7 @@ jQuery(document).ready(function($) {
             phone: $form.find('#tcf-phone').length ? $form.find('#tcf-phone').val() : '',
             telegram_username: $form.find('#tcf-telegram').length ? $form.find('#tcf-telegram').val() : '',
             message: $form.find('#tcf-message').length ? $form.find('#tcf-message').val() : '',
+            captcha: $captcha.val() // Добавляем капчу в formData
         };
 
         $.ajax({
